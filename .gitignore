@@ -1,0 +1,57 @@
+venv/
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+data/
+*.wav
+*.jpg
+*.jpeg
+*.png
+.idea/
+
+# Device credentials — never commit
+tools/uno_q/secrets.bat
+tools/pi/secrets.bat
+
+# camera_models/cam_yolo — generated dataset split, training runs, downloaded/trained weights
+camera_models/cam_yolo/dataset/
+camera_models/cam_yolo/runs/
+*.pt
+
+# camera_models/cam_vit — generated dataset split, training runs, downloaded/trained weights
+camera_models/cam_vit/dataset/
+camera_models/cam_vit/runs/
+camera_models/cam_vit/.checkpoint_cache/
+*.safetensors
+*.onnx
+
+# ...but the ONE model staged for deployment IS committed: camera_node/models/
+# is how the Raspberry Pi station gets a runnable model from a plain git clone
+# (camera_models/*/runs/ above are gitignored, so it cannot get one otherwise).
+# Staged by camera_models/cam_edge/stage_model.py, which also writes the .json
+# metadata beside it. Keep this small - a nano classifier is ~6 MB; do not
+# promote a 343 MB ViT here without deciding to carry it in git history.
+!camera_node/models/
+!camera_node/models/*.onnx
+!camera_node/models/*.json
+
+# development/ generated video output. process_conveyor_video.py rewrites
+# conveyor_annotated.mp4 on every run at ~23 MB, so tracking it puts a fresh
+# 23 MB blob in history each time the script is touched. It is a rebuildable
+# artifact — run the script — and the JSON report beside it, which IS
+# committed, carries the actual findings.
+development/output/*.mp4
+
+# Generated report figures (documents/deliverables/review_2/figures/make_figures.py) - small, and the report needs them
+!documents/deliverables/review_2/figures/
+!documents/deliverables/review_2/figures/*.png
+
+# Review 2 GUI screenshots (development/capture_*.py) - evidence for the report
+!documents/deliverables/review_2/screenshots/
+!documents/deliverables/review_2/screenshots/*.png
+
+# Project overview flow chart (documents/deliverables/project_overview/make_project_flowchart.py) - small, the documents need it
+!documents/deliverables/project_overview/
+!documents/deliverables/project_overview/*.png
